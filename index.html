@@ -325,7 +325,6 @@
     slideEl.classList.add('fade');
 
     setTimeout(function () {
-      slideEl.src = encodeURI(images[currentIndex]);
       slideEl.onload = function () {
         slideEl.style.display = 'block';
         loadingEl.style.display = 'none';
@@ -336,6 +335,7 @@
         // Skip unloadable images
         next();
       };
+      slideEl.src = encodeURI(images[currentIndex]);
     }, 300);
   }
 
@@ -367,7 +367,7 @@
 
   function pause() {
     playing = false;
-    clearTimeout(timer);
+    clearInterval(timer);
     timer = null;
     updateUI();
   }
@@ -377,12 +377,9 @@
   }
 
   function scheduleNext() {
-    clearTimeout(timer);
+    clearInterval(timer);
     if (!playing) return;
-    timer = setTimeout(function () {
-      next();
-      if (playing) scheduleNext();
-    }, interval * 1000);
+    timer = setInterval(next, interval * 1000);
   }
 
   // --- Controls visibility ---
